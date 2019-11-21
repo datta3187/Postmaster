@@ -13,91 +13,99 @@ keychain:
     value: "changeme"
 
 exchanges:
-  barong_system:
+  barong:
     name: barong.events.system
-    signer: barong
-  barong_model:
-    name: barong.events.model
     signer: barong
   peatio:
     name: peatio.events.model
     signer: peatio
 
 events:
-- name: Email Confirmation
-  key: user.email.confirmation.token
-  exchange: barong_system
-  templates:
-    EN:
-      subject: Registration Confirmation
-      template_path: templates/en/email_confirmation.tpl
-    RU:
-      subject: Подтверждение Регистрации
-      template_path: templates/ru/email_confirmation.tpl
+  - name: Email Confirmation
+    key: user.email.confirmation.token
+    exchange: barong
+    templates:
+      EN:
+        subject: Registration Confirmation
+        template_path: templates/en/email_confirmation.tpl
+      RU:
+        subject: Подтверждение Регистрации
+        template_path: templates/ru/email_confirmation.tpl
 
-- name: Password Reset
-  key: user.password.reset.token
-  exchange: barong_system
-  templates:
-    EN:
-      subject: Password Reset
-      template_path: templates/en/password_reset.tpl
-    RU:
-      subject: Сброс Пароля
-      template_path: templates/ru/password_reset.tpl
+  - name: Inquiry
+    key: inquiry.ticket.create
+    exchange: barong
+    templates:
+      EN:
+        subject: User Inquiry
+        template_path: templates/en/inquiry.tpl
+      RU:
+        subject: Запрос пользователя
+        template_path: templates/ru/inquiry.tpl
 
-- name: Label Created
-  key: label.created
-  exchange: barong_model
-  expression: |
-    record.key in ["phone", "profile", "document"] &&
-    record.value in ["verified", "rejected"]
-  templates:
-    EN:
-      subject: Account Details Updated
-      template_path: templates/en/label_created.tpl
+  - name: Password Reset
+    key: user.password.reset.token
+    exchange: barong
+    templates:
+      EN:
+        subject: Password Reset
+        template_path: templates/en/password_reset.tpl
+      RU:
+        subject: Сброс Пароля
+        template_path: templates/ru/password_reset.tpl
 
-- name: Label Updated
-  key: label.updated
-  exchange: barong_model
-  expression: |
-    record.key in ["phone", "profile", "document"] &&
-    record.value in ["verified", "rejected"]
-  templates:
-    EN:
-      subject: Account Details Updated
-      template_path: templates/en/label_created.tpl
+  - name: Label Created
+    key: label.created
+    exchange: barong
+    expression: |
+      record.key in ["phone", "profile", "document"] &&
+      record.value in ["verified", "rejected"]
+    templates:
+      EN:
+        subject: Account Details Updated
+        template_path: templates/en/label_created.tpl
 
-- name: Deposit Accepted
-  key: deposit.updated
-  exchange: peatio
-  expression: changes.state == "submitted" && record.state == "accepted"
-  templates:
-    EN:
-      subject: Deposit Accepted
-      template_path: templates/en/deposit_accepted.tpl
+  - name: Label Updated
+    key: label.updated
+    exchange: barong
+    expression: |
+      record.key in ["phone", "profile", "document"] &&
+      record.value in ["verified", "rejected"]
+    templates:
+      EN:
+        subject: Account Details Updated
+        template_path: templates/en/label_created.tpl
 
-- name: Session Create
-  key: session.create
-  exchange: barong_system
-  templates:
-    EN:
-      subject: New Login
-      template_path: templates/en/session_create.tpl
+  - name: Deposit Accepted
+    key: deposit.updated
+    exchange: peatio
+    expression: changes.state == "submitted" && record.state == "accepted"
+    templates:
+      EN:
+        subject: Deposit Accepted
+        template_path: templates/en/deposit_accepted.tpl
 
-- name: Withdrawal Succeed
-  key: withdraw.updated
-  exchange: peatio
-  expression: changes.state in ["errored", "confirming"] && record.state == "succeed"
-  templates:
-    EN:
-      subject: Withdrawal Succeed
-      template_path: templates/en/withdraw_succeed.tpl
+  - name: Session Create
+    key: session.create
+    exchange: barong
+    templates:
+      EN:
+        subject: New Login
+        template_path: templates/en/session_create.tpl
 
-- name: New Beneficiary
-  key: beneficiary.created
-  exchange: peatio
-  templates:
-    EN:
-      subject: New Beneficiary
-      template_path: templates/en/new_beneficiary.tpl
+  - name: Withdrawal Succeed
+    key: withdraw.updated
+    exchange: peatio
+    expression: changes.state in ["errored", "confirming"] && record.state == "succeed"
+    templates:
+      EN:
+        subject: Withdrawal Succeed
+        template_path: templates/en/withdraw_succeed.tpl
+
+  - name: New Beneficiary
+    key: beneficiary.created
+    exchange: peatio
+    templates:
+      EN:
+        subject: New Beneficiary
+        template_path: templates/en/new_beneficiary.tpl
